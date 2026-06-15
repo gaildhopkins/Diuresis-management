@@ -25,6 +25,10 @@
     --purple-dim:rgba(167,139,250,.15);
     --teal:      #06b6d4;
     --teal-dim:  rgba(6,182,212,.15);
+    --cyan:      #22d3ee;
+    --cyan-dim:  rgba(34,211,238,.15);
+    --amber:     #fbbf24;
+    --amber-dim: rgba(251,191,36,.15);
 
     --euvol:     #22c55e;
     --mild:      #84cc16;
@@ -257,6 +261,37 @@
   .drug-acetaz  .dc-name { color: var(--purple); }
   .drug-sglt2   { border-color: var(--teal);   background: var(--teal-dim);   }
   .drug-sglt2   .dc-name { color: var(--teal); }
+  .drug-tolva   { border-color: var(--cyan);   background: var(--cyan-dim);   }
+  .drug-tolva   .dc-name { color: var(--cyan); }
+  .drug-mra     { border-color: var(--amber);  background: var(--amber-dim);  }
+  .drug-mra     .dc-name { color: var(--amber); }
+  .drug-card .dc-tags { margin-top: 8px; font-size: .7rem; font-weight: 700; }
+  .drug-card .dc-tags span { display: inline-block; margin-right: 10px; margin-bottom: 4px; }
+
+  /* cause cards (diuretic resistance) */
+  .cause-card {
+    border-radius: 10px; border: 1px solid; padding: 12px 14px;
+    margin-bottom: 8px; font-size: .78rem;
+  }
+  .cause-card .cc-title { font-weight: 700; font-size: .84rem; margin-bottom: 4px; }
+  .cause-card .cc-body { color: var(--text-dim); }
+  .cause-card .cc-treat { margin-top: 6px; font-weight: 700; }
+  .cause-prerenal { border-color: var(--danger); background: rgba(239,68,68,.1); }
+  .cause-prerenal .cc-title, .cause-prerenal .cc-treat { color: var(--danger); }
+  .cause-intrarenal { border-color: var(--warn); background: rgba(251,191,36,.1); }
+  .cause-intrarenal .cc-title, .cause-intrarenal .cc-treat { color: var(--warn); }
+  .cause-pk { border-color: var(--muted); background: var(--surface2); }
+  .cause-pk .cc-title { color: var(--text-hi); }
+  .cause-pk .cc-treat { color: var(--text); }
+
+  /* phenotype result */
+  .pheno-tags { margin-top: 8px; }
+  .pheno-tags .ptag {
+    display: inline-block; font-size: .7rem; font-weight: 700;
+    padding: 4px 8px; border-radius: 6px; margin: 2px 4px 2px 0;
+  }
+  .ptag.pref { background: rgba(52,211,153,.15); color: var(--ok); }
+  .ptag.avoid { background: rgba(239,68,68,.15); color: var(--danger); }
 
   /* congestion grading table */
   .grade-grid { display: flex; flex-direction: column; gap: 10px; }
@@ -331,6 +366,7 @@
   <button data-panel="p4">4. Congestion Grade</button>
   <button data-panel="p5">5. Electrolytes</button>
   <button data-panel="p6">6. Discharge</button>
+  <button data-panel="p7">7. Diuretic Resistance</button>
 </nav>
 
 <main>
@@ -397,13 +433,14 @@
 
     <div class="card">
       <h3>Response Assessment</h3>
+      <div class="small" style="margin-bottom:10px;">Enter spot urine Na⁺, 6-h urine output, or both — whichever is available. If only one value is entered, the assessment is based on that criterion alone.</div>
       <div class="row">
         <div class="field">
-          <label class="field-label">Spot urine Na⁺ (mEq/L)</label>
+          <label class="field-label">Spot urine Na⁺ (mEq/L) — optional</label>
           <input type="number" id="urineNa" placeholder="e.g. 60" min="0" step="1">
         </div>
         <div class="field">
-          <label class="field-label">6-h urine output (mL/h)</label>
+          <label class="field-label">6-h urine output (mL/h) — optional</label>
           <input type="number" id="urineOutput" placeholder="e.g. 120" min="0" step="1">
         </div>
       </div>
@@ -509,6 +546,178 @@
         • Salt intake: avoid &gt;6 g NaCl/day (2.4 g Na⁺); avoid excessive fluid intake. Routine severe restriction (&lt;2 g/day) not recommended.<br><br>
         • If furosemide pre-admission, consider switching to bumetanide or torsemide for more predictable absorption.
       </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════ PANEL 7 — DIURETIC RESISTANCE ════════════════════════════════ -->
+  <section class="panel" id="p7">
+    <h2>Diuretic Resistance — Identification &amp; Management</h2>
+    <div class="sub">Prevalence 20–50% of hospitalised HF patients. Based on ADVOR, CLOROTIC, EMPULSE, DAPA-RESIST, EVEREST, ATHENA-HF, and Lima et al. NMA 2026.</div>
+
+    <div class="card">
+      <h3>Identify Diuretic Resistance — Any of the Following</h3>
+      <div class="small">
+        • Persistent congestion despite escalating loop diuretic doses<br>
+        • Spot urine Na⁺ &lt; 50–65 mEq/L at 6 hours post-dose<br>
+        • Urine output &lt; 100 mL/h at 6 hours post-dose<br>
+        • Weight loss &lt; 1 kg/day on maximum-dose IV loop diuretics
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Identify &amp; Treat Underlying Cause</h3>
+
+      <div class="cause-card cause-prerenal">
+        <div class="cc-title">Prerenal / Haemodynamic</div>
+        <div class="cc-body">
+          • Low cardiac output → ↓ renal perfusion<br>
+          • Venous congestion → ↑ renal venous pressure<br>
+          • Elevated intra-abdominal pressure
+        </div>
+        <div class="cc-treat">Treatment: Inotropes · Vasodilators · Paracentesis</div>
+      </div>
+
+      <div class="cause-card cause-intrarenal">
+        <div class="cc-title">Intrarenal / Tubular</div>
+        <div class="cc-body">
+          • DCT hypertrophy with compensatory Na⁺ reabsorption<br>
+          • RAAS/SNS neurohormonal activation<br>
+          • Post-diuretic sodium retention &amp; braking
+        </div>
+        <div class="cc-treat">Treatment: Sequential nephron blockade · RAASi</div>
+      </div>
+
+      <div class="cause-card cause-pk">
+        <div class="cc-title">Pharmacokinetic</div>
+        <div class="cc-body">
+          • Gut oedema delays oral absorption (furosemide bioavailability 10–90%)<br>
+          • Hypoalbuminaemia ↓ tubular secretion<br>
+          • Uremic toxins compete with OAT transporters
+        </div>
+        <div class="cc-treat">Treatment: Switch to IV · Torsemide/bumetanide</div>
+      </div>
+    </div>
+
+    <div class="result danger">
+      <div class="r-label">Trigger for add-on therapy</div>
+      <p>Urine output &lt; 3–4 L/24 h on maximum loop diuretic dose → add sequential nephron blockade (below).</p>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+      <h3>Add-On Agent Selection</h3>
+
+      <div class="drug-card drug-sglt2">
+        <div class="dc-name">SGLT2 Inhibitors — Initiate Early (First-Line)</div>
+        <div class="dc-body">
+          <b>Agents &amp; dose:</b> Empagliflozin 10–25 mg OD · Dapagliflozin 10 mg OD<br>
+          <b>Mechanism:</b> Proximal tubule SGLT2 + NHE3 inhibition → natriuresis without RAAS activation<br>
+          <b>Key trials:</b> EMPAG-HF +25% cumulative UO over 5 days · EMPULSE significant benefit at 90 days · DAPA-RESIST comparable to metolazone, fewer adverse events · NMA 2026: dapagliflozin OR 0.15 (0.03–0.73), empagliflozin OR 0.19 (0.04–0.94) for HF hospitalisation<br>
+          <b>Contraindications:</b> eGFR &lt; 20 mL/min/1.73m² · Type 1 diabetes (DKA risk)<br>
+          <b>Preferred phenotype:</b> All phenotypes — especially electrolyte derangement or hyponatraemia risk
+        </div>
+        <div class="dc-tags"><span style="color:var(--teal);">▸ No electrolyte monitoring</span><span style="color:var(--teal);">▸ Favourable AKI signal</span><span style="color:var(--teal);">▸ GDMT benefit</span></div>
+      </div>
+
+      <div class="drug-card drug-thiaz">
+        <div class="dc-name">Thiazide / Thiazide-Like — Distal Nephron Blockade</div>
+        <div class="dc-body">
+          <b>Agents &amp; dose:</b> Metolazone 2.5–10 mg PO (t½ 12–24h) · Chlorothiazide 500 mg IV (onset 30 min) · HCTZ 25–100 mg PO (eGFR-adjusted)<br>
+          <b>Mechanism:</b> DCT NCC cotransporter blockade → blocks compensatory Na⁺ reabsorption at hypertrophied DCT cells<br>
+          <b>Key trials:</b> CLOROTIC weight −2.3 vs −1.5 kg at 72h (p=0.002) · NMA 2026 largest standardised weight loss SMD 1.33 (0.49–2.18) · 3T trial comparable to tolvaptan for 48h weight loss<br>
+          <b>Cautions:</b> Highest AKI signal in NMA — HCTZ OR 4.14 (2.03–8.42); hypokalaemia, hyponatraemia, hyperuricaemia<br>
+          <b>Preferred phenotype:</b> Refractory oedema; hyperkalaemia from RAASi
+        </div>
+        <div class="dc-tags"><span style="color:var(--orange);">⚠ Monitor electrolytes daily</span><span style="color:var(--orange);">⚠ Monitor creatinine</span><span style="color:var(--orange);">Effective in CKD</span></div>
+      </div>
+
+      <div class="drug-card drug-acetaz">
+        <div class="dc-name">Acetazolamide (CA Inhibitor) — Proximal Nephron Blockade</div>
+        <div class="dc-body">
+          <b>Dose:</b> 500 mg IV OD (ADVOR regimen) — short-term use only<br>
+          <b>Mechanism:</b> Inhibits carbonic anhydrase II &amp; IV in proximal tubule → ↑ NaHCO₃ excretion; overcomes neurohormone-driven proximal Na⁺ retention; neutral neurohormonal activation<br>
+          <b>Key trials:</b> ADVOR decongestion at 72h 42.2% vs 30.5% (RR 1.46, p&lt;0.001), shorter LOS · Greater benefit when HCO₃⁻ ≥ 27 mmol/L · Effect amplified with eGFR ≤ 40 mL/min<br>
+          <b>Cautions:</b> Avoid long-term use (metabolic acidosis risk); monitor HCO₃⁻ and K⁺<br>
+          <b>Preferred phenotype:</b> Metabolic alkalosis (HCO₃⁻ ≥ 27 mmol/L); proximal tubule resistance suspected; when thiazide electrolyte risk unacceptable
+        </div>
+        <div class="dc-tags"><span style="color:var(--purple);">Monitor HCO₃⁻ &amp; K⁺</span><span style="color:var(--purple);">⚠ Avoid long-term use</span><span style="color:var(--purple);">No mortality signal</span></div>
+      </div>
+
+      <div class="drug-card drug-tolva">
+        <div class="dc-name">Tolvaptan (V2 Antagonist) — Aquaresis</div>
+        <div class="dc-body">
+          <b>Dose:</b> 15–30 mg PO OD (short-term only)<br>
+          <b>Mechanism:</b> V2 receptor blockade → free water excretion (aquaresis) without natriuresis<br>
+          <b>Key trials:</b> NMA 2026 largest UO gain MD +1,840 mL (95% CI 441–3,240) vs low-dose furosemide · EVEREST improved short-term symptoms, neutral long-term mortality · Corrects hyponatraemia significantly<br>
+          <b>Cautions:</b> Risk of liver toxicity — short-term use only<br>
+          <b>Preferred phenotype:</b> Hyponatraemia (Na⁺ &lt; 130); water-predominant congestion
+        </div>
+        <div class="dc-tags"><span style="color:var(--cyan);">Corrects hyponatraemia</span><span style="color:var(--cyan);">⚠ Liver toxicity risk</span></div>
+      </div>
+
+      <div class="drug-card drug-mra">
+        <div class="dc-name">Mineralocorticoid Receptor Antagonists</div>
+        <div class="dc-body">
+          <b>Agents &amp; dose:</b> Spironolactone 25–50 mg · Eplerenone · Finerenone<br>
+          <b>Mechanism:</b> ENaC inhibition (indirect via mineralocorticoid receptor) → K⁺-sparing natriuresis<br>
+          <b>Key trials:</b> ATHENA-HF — high-dose spironolactone 100 mg did NOT improve NT-proBNP or UO acutely · RALES — 30% mortality reduction in chronic HFrEF<br>
+          <b>Cautions:</b> Contraindicated if K⁺ &gt; 5.5 mEq/L; monitor K⁺ and creatinine closely<br>
+          <b>Preferred phenotype:</b> Hypokalaemia; RAAS activation; HFrEF GDMT initiation
+        </div>
+        <div class="dc-tags"><span style="color:var(--amber);">⚠ K⁺ &gt; 5.5 = contraindicated</span><span style="color:var(--amber);">HFrEF mortality benefit</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Phenotype-Guided Agent Selection</h3>
+      <div class="field">
+        <label class="field-label">Clinical scenario</label>
+        <select id="phenoSelect" onchange="showPhenotype()">
+          <option value="hypona">Hyponatraemia (Na⁺ &lt; 135 mEq/L)</option>
+          <option value="metalk">Metabolic alkalosis (HCO₃⁻ ≥ 27 mmol/L)</option>
+          <option value="hypok">Hypokalaemia (K⁺ &lt; 3.5 mEq/L)</option>
+          <option value="hyperk">Hyperkalaemia (K⁺ &gt; 5.5 mEq/L)</option>
+          <option value="water">Water-predominant congestion</option>
+          <option value="metacid">Metabolic acidosis</option>
+          <option value="ckd">Severe CKD (eGFR &lt; 30 mL/min)</option>
+        </select>
+      </div>
+      <div id="phenoResult"></div>
+    </div>
+
+    <div class="card">
+      <h3>Monitoring During Decongestion</h3>
+      <div class="result danger">
+        <div class="r-label">🔴 High-Risk Signals — Escalate</div>
+        <p>Creatinine rise &gt; 0.5 mg/dL without decongestion · K⁺ &lt; 3.0 or &gt; 5.5 mEq/L · Systolic BP &lt; 90 mmHg · Na⁺ &lt; 125 mEq/L · Urine output &lt; 1 mL/kg/h despite max therapy · Rising lactate (low cardiac output)</p>
+      </div>
+      <div class="result warn">
+        <div class="r-label">🟡 Routine Monitoring</div>
+        <p>Daily weight and fluid balance · Spot urine Na⁺ at 6h post-dose · Urea &amp; electrolytes daily (twice daily if combination therapy) · HCO₃⁻ monitoring if acetazolamide · Target UO ≥ 3–4 L/day · Congestion score (oedema, JVP, ascites)</p>
+      </div>
+      <div class="result ok">
+        <div class="r-label">🟢 Reassuring Decongestion Signs</div>
+        <p>Weight loss ≥ 1–2 kg/day · Spot urine Na⁺ ≥ 50–70 mEq/L · Improving dyspnoea score · JVP &lt; 8 cm H₂O · Resolving peripheral oedema &amp; orthopnoea · Declining NT-proBNP/BNP</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Refractory to All Pharmacological Strategies</h3>
+      <div class="drug-card" style="border-color:var(--danger); background:rgba(239,68,68,.1);">
+        <div class="dc-name" style="color:var(--danger);">Ultrafiltration</div>
+        <div class="dc-body">Reserve for truly refractory cases after all pharmacological options exhausted. CARRESS-HF: pharmacological therapy superior to UF for renal preservation. Contraindications: hypotension, severe infection, haemodynamic instability.</div>
+      </div>
+      <div class="drug-card" style="border-color:var(--danger); background:rgba(239,68,68,.1);">
+        <div class="dc-name" style="color:var(--danger);">Haemodynamic Support</div>
+        <div class="dc-body">Inotropes if low cardiac output (MAP &lt; 65, cool extremities, rising lactate) to restore renal perfusion and re-establish diuretic response. ROSE-AHF: low-dose dopamine showed no benefit in unselected HF with renal dysfunction.</div>
+      </div>
+      <div class="drug-card" style="border-color:var(--danger); background:rgba(239,68,68,.1);">
+        <div class="dc-name" style="color:var(--danger);">Advanced HF Referral</div>
+        <div class="dc-body">LVAD candidacy assessment · Heart transplant evaluation · Implantable PA pressure monitoring (CHAMPION: ↓ HF hospitalisations at 6 months) · Palliative care discussion if appropriate.</div>
+      </div>
+    </div>
+
+    <div class="small" style="margin-top:4px; margin-bottom:8px;">
+      Sources: Fr&#259;&#355;il&#259; et al. Rom J Cardiol 2023;33(3):83–92 (sequential nephron blockade, Tables 1–2) · Lima et al. JACC Adv 2026;5:102617 (network meta-analysis) · ADVOR, CLOROTIC, EMPULSE, DAPA-RESIST, EVEREST, ATHENA-HF, RALES, CARRESS-HF, ROSE-AHF, CHAMPION trials.
     </div>
   </section>
 
@@ -618,23 +827,49 @@ function evaluateResponse() {
   var agent = getSegValue('agentSeg');
   var maxDose = getMaxDose(agent);
   var currentDose = parseFloat(document.getElementById('currentDose').value);
-  var na = parseFloat(document.getElementById('urineNa').value);
-  var uo = parseFloat(document.getElementById('urineOutput').value);
+  var naRaw = document.getElementById('urineNa').value;
+  var uoRaw = document.getElementById('urineOutput').value;
+  var hasNa = naRaw !== '';
+  var hasUo = uoRaw !== '';
+  var na = parseFloat(naRaw);
+  var uo = parseFloat(uoRaw);
   var result = document.getElementById('responseResult');
   result.classList.remove('hidden');
 
-  if (isNaN(currentDose) || isNaN(na) || isNaN(uo)) {
+  if (isNaN(currentDose)) {
     result.className = 'result warn';
-    result.innerHTML = '<div class="r-label">Input required</div><p>Please enter the current dose, spot urine Na⁺, and 6-h urine output.</p>';
+    result.innerHTML = '<div class="r-label">Input required</div><p>Please enter the current dose.</p>';
     return;
   }
 
-  var adequate = (na >= 50 && uo >= 100);
-  // Threshold per HFA-ESC statement: spot urine Na+ > 50-70 mEq/L AND 6-h UO > 100-150 mL/h
+  if (!hasNa && !hasUo) {
+    result.className = 'result warn';
+    result.innerHTML = '<div class="r-label">Input required</div><p>Please enter spot urine Na⁺, 6-h urine output, or both.</p>';
+    return;
+  }
+
+  // Determine adequacy and build a description of which criteria were used
+  var naAdequate = hasNa ? (na >= 50) : null;
+  var uoAdequate = hasUo ? (uo >= 100) : null;
+  var adequate, criteriaText, criteriaUsed;
+
+  if (hasNa && hasUo) {
+    adequate = (naAdequate && uoAdequate);
+    criteriaUsed = 'Na⁺ ' + na + ' mEq/L (' + (naAdequate ? '≥' : '<') + ' 50) and UO ' + uo + ' mL/h (' + (uoAdequate ? '≥' : '<') + ' 100)';
+    criteriaText = 'Assessed on both criteria (Na⁺ ≥ 50 mEq/L AND UO ≥ 100 mL/h).';
+  } else if (hasNa) {
+    adequate = naAdequate;
+    criteriaUsed = 'Na⁺ ' + na + ' mEq/L (' + (naAdequate ? '≥' : '<') + ' 50 mEq/L threshold)';
+    criteriaText = 'Urine output not available — assessed on spot urine Na⁺ alone (≥ 50 mEq/L).';
+  } else {
+    adequate = uoAdequate;
+    criteriaUsed = 'UO ' + uo + ' mL/h (' + (uoAdequate ? '≥' : '<') + ' 100 mL/h threshold)';
+    criteriaText = 'Urine sodium not available — assessed on 6-h urine output alone (≥ 100 mL/h).';
+  }
 
   if (adequate) {
-    var html = '<div class="r-label">✓ Adequate response (Na⁺ ' + na + ' mEq/L ≥ 50, UO ' + uo + ' mL/h ≥ 100)</div>';
-    html += '<p>Diuretic threshold reached. Next: assess for persistent congestion.</p>';
+    var html = '<div class="r-label">✓ Adequate response — ' + criteriaUsed + '</div>';
+    html += '<p>' + criteriaText + ' Diuretic threshold reached. Next: assess for persistent congestion.</p>';
     html += '<div class="btn-row" style="margin-top:10px;">';
     html += '<button class="btn secondary" onclick="logDose(\'No persistent congestion → proceed to Step 4 (congestion grading)\')">No persistent congestion</button>';
     html += '<button class="btn secondary" onclick="logDose(\'Persistent congestion → repeat ' + currentDose + ' mg ' + agent + ' every 12 h (once-daily if good single-dose response)\')">Persistent congestion</button>';
@@ -644,20 +879,23 @@ function evaluateResponse() {
   } else {
     var doubled = currentDose * 2;
     var atMax = currentDose >= maxDose;
-    var html = '<div class="r-label">✗ Inadequate response (Na⁺ ' + na + ' mEq/L, UO ' + uo + ' mL/h — threshold is Na⁺ ≥ 50 mEq/L and UO ≥ 100 mL/h)</div>';
+    var html = '<div class="r-label">✗ Inadequate response — ' + criteriaUsed + '</div>';
+    html += '<p>' + criteriaText + '</p>';
     if (atMax) {
-      html += '<p><b>Maximal dose already reached</b> (' + currentDose + ' mg ≥ max ' + maxDose + ' mg/day for ' + agent + '). Proceed to <b>Step 3 (Day-2 algorithm)</b> for combination diuretic therapy.</p>';
+      html += '<p style="margin-top:6px;"><b>Maximal dose already reached</b> (' + currentDose + ' mg ≥ max ' + maxDose + ' mg/day for ' + agent + '). Proceed to <b>Step 3 (Day-2 algorithm)</b> or <b>Tab 7 (Diuretic Resistance)</b> for combination diuretic therapy.</p>';
       result.className = 'result danger';
     } else {
       var capped = Math.min(doubled, maxDose);
-      html += '<p>Double the IV loop diuretic dose to <b>' + capped + ' mg ' + agent + '</b>' + (capped < doubled ? ' (capped at maximum daily dose)' : '') + '. Re-assess urine Na⁺ and output within 6 hours.</p>';
+      html += '<p style="margin-top:6px;">Double the IV loop diuretic dose to <b>' + capped + ' mg ' + agent + '</b>' + (capped < doubled ? ' (capped at maximum daily dose)' : '') + '. Re-assess within 6 hours.</p>';
       html += '<button class="btn full" style="margin-top:10px;" onclick="applyDoubledDose(' + capped + ')">Apply doubled dose (' + capped + ' mg) &amp; clear inputs</button>';
       result.className = 'result warn';
     }
     result.innerHTML = html;
   }
 
-  doseLogEntries.unshift('Dose ' + currentDose + ' mg ' + agent + ' — Na⁺ ' + na + ', UO ' + uo + ' mL/h → ' + (adequate ? 'Adequate' : 'Inadequate'));
+  var logNa = hasNa ? na : '—';
+  var logUo = hasUo ? (uo + ' mL/h') : '—';
+  doseLogEntries.unshift('Dose ' + currentDose + ' mg ' + agent + ' — Na⁺ ' + logNa + ', UO ' + logUo + ' → ' + (adequate ? 'Adequate' : 'Inadequate'));
   renderDoseLog();
 }
 
@@ -947,6 +1185,76 @@ function updateProgress() {
 }
 
 renderChecklist();
+
+/* ══════════════════════════════════════════════════════════════════
+   PANEL 7 — DIURETIC RESISTANCE: PHENOTYPE-GUIDED SELECTION
+   ══════════════════════════════════════════════════════════════════ */
+var phenotypeContent = {
+  hypona: {
+    title: 'Hyponatraemia (Na⁺ < 135 mEq/L)',
+    context: 'Dilutional or depletional — see Tab 5 (Electrolytes) to differentiate.',
+    pref: ['SGLT2i', 'Tolvaptan (severe dilutional)'],
+    avoid: ['Thiazides', 'High-dose MRA']
+  },
+  metalk: {
+    title: 'Metabolic Alkalosis (HCO₃⁻ ≥ 27 mmol/L)',
+    context: 'Hypochloraemic alkalosis — common with loop/thiazide use, contributes to diuretic resistance.',
+    pref: ['Acetazolamide', 'MRAs'],
+    avoid: ['Additional loop diuretic', 'Additional thiazide']
+  },
+  hypok: {
+    title: 'Hypokalaemia (K⁺ < 3.5 mEq/L)',
+    context: 'Metabolic alkalosis commonly co-exists.',
+    pref: ['MRAs', 'ENaC blockers (amiloride)'],
+    avoid: ['Additional thiazide']
+  },
+  hyperk: {
+    title: 'Hyperkalaemia (K⁺ > 5.5 mEq/L)',
+    context: 'Often related to RAASi use and/or CKD.',
+    pref: ['SGLT2i', 'Thiazides (kaliuretic)'],
+    avoid: ['MRAs', 'ENaC blockers']
+  },
+  water: {
+    title: 'Water-Predominant Congestion',
+    context: 'Dilutional hyponatraemia typically present.',
+    pref: ['Tolvaptan (aquaresis)', 'SGLT2i'],
+    avoid: ['Aggressive natriuresis']
+  },
+  metacid: {
+    title: 'Metabolic Acidosis',
+    context: 'Low HCO₃⁻, often in the context of CKD.',
+    pref: ['Thiazides', 'Loop diuretics'],
+    avoid: ['Acetazolamide', 'MRAs']
+  },
+  ckd: {
+    title: 'Severe CKD (eGFR < 30 mL/min)',
+    context: 'Variable electrolyte/acid-base picture — individualise.',
+    pref: ['Higher ceiling loop dose (up to 600 mg/day)', 'Thiazides'],
+    avoid: ['SGLT2i (if eGFR < 20)', 'Tolvaptan (limited data)']
+  }
+};
+
+function showPhenotype() {
+  var key = document.getElementById('phenoSelect').value;
+  var data = phenotypeContent[key];
+  var el = document.getElementById('phenoResult');
+
+  var tagsHtml = '<div class="pheno-tags">';
+  for (var i = 0; i < data.pref.length; i++) {
+    tagsHtml += '<span class="ptag pref">✓ ' + data.pref[i] + '</span>';
+  }
+  for (var j = 0; j < data.avoid.length; j++) {
+    tagsHtml += '<span class="ptag avoid">✗ ' + data.avoid[j] + '</span>';
+  }
+  tagsHtml += '</div>';
+
+  el.innerHTML = '<div class="result info">' +
+    '<div class="r-label">' + data.title + '</div>' +
+    '<p>' + data.context + '</p>' +
+    tagsHtml +
+    '</div>';
+}
+showPhenotype();
 </script>
 
 </body>
